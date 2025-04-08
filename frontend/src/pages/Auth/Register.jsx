@@ -1,7 +1,24 @@
-import React from "react";
+import React,{useState} from "react";
 import Layout from "../../components/layout/Layout";
+import { toast } from 'react-toastify';
+
 
 const Register = () => {
+
+  // State Management
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [phone, setPhone] = useState("")
+  const [address, setAddress] = useState("")
+
+// Form Submit Function
+const handleSubmit = (e) => {
+  e.preventDefault()
+  console.log(name,email,password,address,phone)
+  toast.success("Registered Successfully!")
+}
+
   return (
     <>
       <Layout title={"Register"}>
@@ -16,7 +33,7 @@ const Register = () => {
                         <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
                           Sign up
                         </p>
-                        <form className="mx-1 mx-md-4">
+                        <form onSubmit={handleSubmit} className="mx-1 mx-md-4">
                           <div className="d-flex flex-row align-items-center mb-4">
                             <i className="fas fa-user fa-lg me-3 fa-fw" />
                             <div
@@ -25,9 +42,12 @@ const Register = () => {
                             >
                               <input
                                 type="text"
-                                id="form3Example1c"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                id="form"
                                 className="form-control"
-                                placeholder="Enter  Your Name"
+                                placeholder="Enter Your Name"
+                                required
                               />
                             </div>
                           </div>
@@ -39,9 +59,12 @@ const Register = () => {
                             >
                               <input
                                 type="email"
-                                id="form3Example3c"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                id="form"
                                 className="form-control"
                                 placeholder="Enter your Email"
+                                required
                               />
                             </div>
                             
@@ -54,9 +77,12 @@ const Register = () => {
                             >
                               <input
                                 type="password"
-                                id="form3Example4c"
+                                value={password}
+                                onChange={(e)=>setPassword(e.target.value)}
+                                id="form"
                                 className="form-control"
                                 placeholder="Enter Password"
+                                required
                               />
                             </div>
                           </div>
@@ -68,9 +94,12 @@ const Register = () => {
                             >
                               <input
                                 type="number"
-                                id="form3Example3c"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                id="form"
                                 className="form-control"
                                 placeholder="Enter your Phone Number"
+                                required
                               />
                             </div>
                           </div>
@@ -83,9 +112,12 @@ const Register = () => {
                             >
                               <input
                                 type="text"
-                                id="form3Example3c"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                id="form"
                                 className="form-control"
                                 placeholder="Enter your Address"
+                                required
                               />
                             </div>
                           </div>
@@ -106,7 +138,7 @@ const Register = () => {
                           </div>
                           <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                             <button
-                              type="button"
+                              type="submit"
                               data-mdb-button-init
                               data-mdb-ripple-init
                               className="btn btn-dark btn"
@@ -120,7 +152,7 @@ const Register = () => {
                         <img
                           src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
                           className="img-fluid"
-                          alt="Sample image"
+                          alt="Register"
                         />
                       </div>
                     </div>

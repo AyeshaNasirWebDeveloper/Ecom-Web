@@ -4,6 +4,8 @@ import "dotenv/config";
 import morgan from "morgan";
 import connectDB from "./database/db.js";
 import authRoute from "./routes/authRoute.js"
+import cors from "cors"
+import path from "path"
 
 // database
 connectDB();
@@ -11,9 +13,15 @@ connectDB();
 // rest object
 const app = express();
 
+const __dirname =path.resolve()
+
 // middleware
+app.use(cors)
 app.use(express.json());
 app.use(morgan("dev"));
+
+// Connected to Frontend
+app.use('/', express.static(path.join(__dirname, 'frontend')))
 
 // routes
 app.use('/api/v1/auth', authRoute)

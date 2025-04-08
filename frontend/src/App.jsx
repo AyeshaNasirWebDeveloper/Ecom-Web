@@ -8,6 +8,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 import Register from './pages/Auth/Register.jsx'
 
+
 const App = () => {
   return (
     <>
