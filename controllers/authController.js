@@ -8,31 +8,31 @@ export const registerController = async (req, res) => {
     // validation for Name
     if (!name) {
       return res.status(400).send({
-        error: "Name is Required!",
+        message: "Name is Required!",
       });
     }
     // validation for Email
     if (!email) {
       return res.status(400).send({
-        error: "Email is Required!",
+        message: "Email is Required!",
       });
     }
     // validation for Password
     if (!password) {
       return res.status(400).send({
-        error: "Password is Required!",
+        message: "Password is Required!",
       });
     }
     // validation for Phone
     if (!phone) {
       return res.status(400).send({
-        error: "Phone number is Required!",
+        message: "Phone number is Required!",
       });
     }
     // validation for Address
     if (!address) {
       return res.status(400).send({
-        error: "Address is Required!",
+        message: "Address is Required!",
       });
     }
 
@@ -41,7 +41,7 @@ export const registerController = async (req, res) => {
     // Checking for Existing Users
     if (existingUser) {
       return res.status(200).send({
-        success: true,
+        success: false,
         message: "Already have an account! Please login",
       });
     }

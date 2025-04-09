@@ -3,30 +3,34 @@ import Layout from "../../components/layout/Layout";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAuth } from "../../context/auth";
 
-const Register = () => {
+const Login = () => {
   // State Management
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [auth, setAuth] = useAuth()
+
   // using hook
   const navigate = useNavigate();
 
   // Form Submit Function
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API}/api/v1/auth/register`,
-        { name, email, password, phone, address }
+        `${import.meta.env.VITE_API}/api/v1/auth/login`,
+        { email, password }
       ); // Sending network request
       if (res.data.success) {
         toast.success(res.data.message || "Registered Successfully!");
-        navigate("/login");
+        setAuth({
+            ...auth,
+            user: res.data.user,
+            token: res.data.token,
+        })
+        localStorage.setItem('auth', JSON.stringify(res.data))
+        navigate("/");
       } else {
         toast.error(res.data.message || "Registration failed!");
       }
@@ -41,16 +45,14 @@ const Register = () => {
         // Something happened in setting up the request
         toast.error("Error in registration. Please check your connection.");
       }
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <>
-      <Layout title={"Register"}>
-        <section className="vh-65" style={{ backgroundColor: "#eee" }}>
-          <div className="container h-100">
+      <Layout title={"Login"}>
+        <section className="vh-25" style={{ backgroundColor: "#eee" }}>
+          <div className="container h-50">
             <div className="row d-flex justify-content-center align-items-center h-100">
               <div className="col-lg-12 col-xl-11">
                 <div className="card text-black" style={{ borderRadius: 25 }}>
@@ -58,26 +60,9 @@ const Register = () => {
                     <div className="row justify-content-center">
                       <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                         <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
-                          Sign up
+                          Login
                         </p>
                         <form onSubmit={handleSubmit} className="mx-1 mx-md-4">
-                          <div className="d-flex flex-row align-items-center mb-4">
-                            <i className="fas fa-user fa-lg me-3 fa-fw" />
-                            <div
-                              data-mdb-input-init
-                              className="form-outline flex-fill mb-0"
-                            >
-                              <input
-                                type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                id="name"
-                                className="form-control"
-                                placeholder="Enter Your Name"
-                                required
-                              />
-                            </div>
-                          </div>
                           <div className="d-flex flex-row align-items-center mb-4">
                             <i className="fas fa-envelope fa-lg me-3 fa-fw" />
                             <div
@@ -112,51 +97,14 @@ const Register = () => {
                               />
                             </div>
                           </div>
-                          <div className="d-flex flex-row align-items-center mb-4">
-                            <i className="fas fa-envelope fa-lg me-3 fa-fw" />
-                            <div
-                              data-mdb-input-init
-                              className="form-outline flex-fill mb-0"
-                            >
-                              <input
-                                type="number"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                id="phone"
-                                className="form-control"
-                                placeholder="Enter your Phone Number"
-                                required
-                              />
-                            </div>
-                          </div>
-
-                          <div className="d-flex flex-row align-items-center mb-4">
-                            <i className="fas fa-envelope fa-lg me-3 fa-fw" />
-                            <div
-                              data-mdb-input-init
-                              className="form-outline flex-fill mb-0"
-                            >
-                              <input
-                                type="text"
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
-                                id="address"
-                                className="form-control"
-                                placeholder="Enter your Address"
-                                required
-                              />
-                            </div>
-                          </div>
-
                           <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                             <button
                               type="submit"
                               data-mdb-button-init
                               data-mdb-ripple-init
                               className="btn btn-dark btn"
-                              disabled={loading}
                             >
-                              {loading ? "Registering..." : "Register Now"}
+                              Login
                             </button>
                           </div>
                         </form>
@@ -180,4 +128,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

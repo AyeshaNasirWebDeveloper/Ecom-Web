@@ -5,7 +5,6 @@ import morgan from "morgan";
 import connectDB from "./database/db.js";
 import authRoute from "./routes/authRoute.js"
 import cors from "cors"
-import path from "path"
 
 // database
 connectDB();
@@ -13,17 +12,27 @@ connectDB();
 // rest object
 const app = express();
 
-const __dirname =path.resolve()
-
 // middleware
-app.use(cors)
+// app.use(cors)
 app.use(express.json());
 app.use(morgan("dev"));
 
 // Server Static Files from React
-app.use('/', express.static(path.join(__dirname, 'frontend/dist')))
+// app.use('/', express.static(path.join(path.resolve(), 'frontend/dist/index.html')))
 
-// routes
+// Connecting frontend to backend
+// Enable CORS properly
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+// Handle preflight requests
+app.options('*', cors());
+
+// endpoint
 app.use('/api/v1/auth', authRoute)
 
 // rest api
