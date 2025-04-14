@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect, useContext, createContext, Children } from "react";
+import { useState, useEffect, useContext, createContext } from "react";
 
 // Stored hook in the variable
 const AuthContext = createContext()
@@ -23,6 +23,8 @@ export const AuthProvider = ({children}) => {
                 user: parseData.user,
                 token: parseData.token
             })
+            // axios.defaults.headers.common['Authorization'] = `Bearer ${parseData.token}`;
+
         }
         // eslint-disable-next-line
     }, [])

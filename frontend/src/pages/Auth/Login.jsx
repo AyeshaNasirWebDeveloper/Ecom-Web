@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/layout/Layout";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../context/auth";
 
@@ -13,6 +13,7 @@ const Login = () => {
 
   // using hook
   const navigate = useNavigate();
+  const location = useLocation()
 
   // Form Submit Function
   const handleSubmit = async (e) => {
@@ -23,16 +24,18 @@ const Login = () => {
         { email, password }
       ); // Sending network request
       if (res.data.success) {
-        toast.success(res.data.message || "Registered Successfully!");
+        toast.success(res.data.message || "Login Successfully!");
         setAuth({
             ...auth,
             user: res.data.user,
             token: res.data.token,
         })
-        localStorage.setItem('auth', JSON.stringify(res.data))
-        navigate("/");
+        // localStorage.setItem('auth', JSON.stringify(res.data))
+        // navigate(location.state || "/");
+        const redirectPath = location.state?.from || "/dashboard"; // fallback if no original path
+        navigate(redirectPath);
       } else {
-        toast.error(res.data.message || "Registration failed!");
+        toast.error(res.data.message || "Login failed!");
       }
     } catch (error) {
       if (error.response) {
@@ -97,7 +100,16 @@ const Login = () => {
                               />
                             </div>
                           </div>
-                          <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                          <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4 ">
+                            <button
+                              type="submit"
+                              data-mdb-button-init
+                              data-mdb-ripple-init
+                              className="btn btn-dark btn me-5"
+                              onClick={() => {navigate('/forgot-password')}}
+                            >
+                              Forgot Password?
+                            </button>
                             <button
                               type="submit"
                               data-mdb-button-init

@@ -5,7 +5,7 @@ import { useAuth } from '../context/auth'
 export const HomePage = () => {
 
   // creating state
-  const[auth, setAuth] = useAuth()
+  const[auth] = useAuth()
   return (
     <Layout title={'E-Commerce Store'}>
         <h1>HomePage</h1>

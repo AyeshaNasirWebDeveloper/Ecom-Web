@@ -11,6 +11,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
   // using hook
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Register = () => {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API}/api/v1/auth/register`,
-        { name, email, password, phone, address }
+        { name, email, password, phone, address, answer }
       ); // Sending network request
       if (res.data.success) {
         toast.success(res.data.message || "Registered Successfully!");
@@ -143,6 +144,24 @@ const Register = () => {
                                 id="address"
                                 className="form-control"
                                 placeholder="Enter your Address"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div className="d-flex flex-row align-items-center mb-4">
+                            <i className="fas fa-envelope fa-lg me-3 fa-fw" />
+                            <div
+                              data-mdb-input-init
+                              className="form-outline flex-fill mb-0"
+                            >
+                              <input
+                                type="text"
+                                value={answer}
+                                onChange={(e) => setAnswer(e.target.value)}
+                                id="answer"
+                                className="form-control"
+                                placeholder="What is your Favourite Food?"
                                 required
                               />
                             </div>
