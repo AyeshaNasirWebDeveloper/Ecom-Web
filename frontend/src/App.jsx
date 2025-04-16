@@ -11,6 +11,8 @@ import Login from "./pages/Auth/Login.jsx";
 import Dashboard from "./pages/user/Dashboard.jsx";
 import PrivateRoute from "./components/Routes/Private.jsx";
 import ForgotPassword from "./pages/Auth/ForgotPassword.jsx";
+import AdminRoute from "./components/Routes/Admin.jsx";
+import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
 
 const App = () => {
   return (
@@ -18,7 +20,10 @@ const App = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/dashboard" element={<PrivateRoute />}>
-          <Route index element={<Dashboard />} />
+          <Route path="user" element={<Dashboard />} />
+        </Route>
+        <Route path="/dashboard" element={<AdminRoute />}>
+          <Route path="admin" element={<AdminDashboard />} />
         </Route>
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

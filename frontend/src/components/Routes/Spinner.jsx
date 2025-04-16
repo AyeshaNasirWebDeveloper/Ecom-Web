@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/auth"; 
 
-const Spinner = () => {
+const Spinner = ({path = "login"}) => {
   const [count, setCount] = useState(5);
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,7 +16,7 @@ const Spinner = () => {
   
           // Only redirect if not logged in
           if (!auth?.token) {
-            navigate("/login", {
+            navigate(`/${path}`, {
               state: { from: location.pathname },
             });
           }
@@ -29,7 +29,7 @@ const Spinner = () => {
     }, 1000);
   
     return () => clearInterval(interval);
-  }, [auth?.token, navigate, location]);
+  }, [auth?.token, navigate, location, path]);
   
 
   return (
