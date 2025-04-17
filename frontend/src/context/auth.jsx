@@ -6,9 +6,9 @@ const AuthContext = createContext()
 
 // Creating Global State
 export const AuthProvider = ({children}) => {
-    const [auth, setAuth] = useState({
-        user:null,
-        token: ""
+    const [auth, setAuth] = useState( () =>{
+        const data = localStorage.getItem("auth");
+        return data ? JSON.parse(data) : { user: null, token: "" };
     })
 
     // default axios 

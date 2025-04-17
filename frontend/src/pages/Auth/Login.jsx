@@ -9,11 +9,11 @@ const Login = () => {
   // State Management
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [auth, setAuth] = useAuth()
+  const [auth, setAuth] = useAuth();
 
   // using hook
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
 
   // Form Submit Function
   const handleSubmit = async (e) => {
@@ -26,14 +26,23 @@ const Login = () => {
       if (res.data.success) {
         toast.success(res.data.message || "Login Successfully!");
         setAuth({
-            ...auth,
-            user: res.data.user,
-            token: res.data.token,
-        })
-        // localStorage.setItem('auth', JSON.stringify(res.data))
-        // navigate(location.state || "/");
-        const redirectPath = location.state?.from || "/dashboard"; // fallback if no original path
-        navigate(redirectPath);
+          ...auth,
+          user: res.data.user,
+          token: res.data.token,
+        });
+        localStorage.setItem("auth", JSON.stringify(res.data));
+        navigate(location.state || "/");
+        // Role-based redirect
+        // if (res.data.user.role === 1) {
+        //   // Assuming 1 is admin role
+        //   navigate("/dashboard/admin");
+        // } else if(location) {
+        //   navigate(location.state || "/");
+        // } else {
+        //   navigate("/dashboard/user");
+        // }
+        // const redirectPath = location.state?.from || "/dashboard"; // fallback if no original path
+        // navigate(redirectPath);
       } else {
         toast.error(res.data.message || "Login failed!");
       }
@@ -106,7 +115,9 @@ const Login = () => {
                               data-mdb-button-init
                               data-mdb-ripple-init
                               className="btn btn-dark btn me-5"
-                              onClick={() => {navigate('/forgot-password')}}
+                              onClick={() => {
+                                navigate("/forgot-password");
+                              }}
                             >
                               Forgot Password?
                             </button>

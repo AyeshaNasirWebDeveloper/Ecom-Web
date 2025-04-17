@@ -23,10 +23,12 @@ export default function AdminRoute() {
           setOk(true);
         } else {
           setOk(false);
+          window.location.href = '/';
         }
       } catch (error) {
         console.error("Auth Check Failed:", error);
         setOk(false);
+        window.location.href = '/';
       }
     };
   
