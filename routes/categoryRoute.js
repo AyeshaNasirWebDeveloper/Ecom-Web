@@ -4,7 +4,8 @@ import {
   createCategoryController,
   updateCategoryController,
   categoryController,
-  singleCatgoryController
+  singleCatgoryController,
+  deleteCategoryController,
 } from "../controllers/categoryController.js";
 
 const router = express.Router();
@@ -26,9 +27,12 @@ router.put(
 );
 
 // Getting All Categories
-router.get('/get-category', categoryController)
+router.get("/get-category", categoryController);
 
 // Getting Single Category
-router.get('/single-category/:slug', singleCatgoryController)
+router.get("/single-category/:slug", singleCatgoryController);
+
+// Delete Category
+router.delete('/delete-category/:id', requireSignIn, isAdmin, deleteCategoryController)
 
 export default router;
