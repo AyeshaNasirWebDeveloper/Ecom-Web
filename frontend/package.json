@@ -10,9 +10,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "proxy": "http://localhost:8080"
-
   },
   "dependencies": {
+    "antd": "^5.24.7",
     "axios": "^1.8.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

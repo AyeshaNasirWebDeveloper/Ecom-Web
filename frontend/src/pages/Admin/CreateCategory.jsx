@@ -4,10 +4,14 @@ import AdminMenu from "../../components/layout/AdminMenu.jsx";
 import { toast } from "react-toastify";
 import axios from "axios";
 import CategoryForm from "./../../components/Form/CategoryForm.jsx";
+import { Button, Modal } from 'antd';
 
 const CreateCategory = () => {
   const [categories, setCategories] = useState([]);
   const [ name, setName ] = useState("");
+  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState(null)
+  const [updatedName, setUpdatedName] = useState("")
 
   // Form Handling
   const handleSubmit = async (e) => {
@@ -52,6 +56,42 @@ const CreateCategory = () => {
     getAllCategory();
   }, []);
 
+
+  // Update Category
+  const handleUpdate = async (e) => {
+    e.preventDefault()
+    try {
+      const {data} = await axios.put(`/api/v1/category/update-category/${selected._id}`, {name: updatedName})
+      if(data.success){
+        toast.success(`${updatedName} category updated`)
+        setSelected(null)
+        setUpdatedName("")
+        setOpen(false)
+        getAllCategory()
+      } else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Something went wrong')
+    }
+  }
+
+  // Delete Category
+  const handleDelete = async (pid) => {
+    try {
+      const {data} = await axios.delete(`/api/v1/category/delete-category/${pid}`)
+      if(data.success){
+        toast.success(`category deleted`)
+      } else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Something went wrong')
+    }
+  }
+
+
+
   return (
     <Layout title={"Dashboard - Create Category"}>
       <div className="container-fluid">
@@ -81,13 +121,17 @@ const CreateCategory = () => {
                     <tr key={c._id}>
                       <td>{c.name}</td>
                       <td>
-                        <button className="btn btn-primary">Edit</button>
+                        <button className="btn btn-primary ms-2" onClick = {() => {setOpen(true) ; setUpdatedName(c.name) ; setSelected(c)}}>Edit</button>
+                        <button className="btn btn-danger ms-2" onClick={() => {handleDelete(c._id)}}>Delete</button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+            <Modal onCancel = {() => setOpen(false)} footer={null} open={open}>
+              <CategoryForm value={updatedName} setValue={setUpdatedName} handleSubmit={handleUpdate}/>
+            </Modal>
           </div>
         </div>
       </div>
