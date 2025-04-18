@@ -149,7 +149,7 @@ export const updateProductController = async (req,res) => {
             return res.status(500).send({ error: "Category is Required!" });
           case !quantity:
             return res.status(500).send({ error: "Quantity is Required!" });
-          case photo && photo.size > 1000000: //1000000
+          case photo && photo.size > 100000: //1000000
             return res
               .status(500)
               .send({ error: "Photo is Required & should be less than 1mb" });
@@ -159,6 +159,7 @@ export const updateProductController = async (req,res) => {
           products.photo.data = fs.readFileSync(photo.path);
           products.photo.contentType = photo.type;
         }
+      
         await products.save(); // Photos are also saved
         res.status(201).send({
           success: true,
