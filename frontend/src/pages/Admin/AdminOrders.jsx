@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import AdminMenu from "../../components/Layout/AdminMenu";
-import Layout from "../../components/Layout/Layout";
-import { useAuth } from "../../context/auth";
+import AdminMenu from "../../components/Layout/AdminMenu.jsx";
+import Layout from "../../components/Layout/Layout.jsx";
+import { useAuth } from "../../context/auth.jsx";
 import moment from "moment";
 import { Select, Spin } from "antd";
 const { Option } = Select;

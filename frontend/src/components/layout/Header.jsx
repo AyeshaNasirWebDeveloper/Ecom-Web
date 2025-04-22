@@ -1,10 +1,17 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
-import { useAuth } from "../../context/auth";
+import { useAuth } from "../../context/auth.jsx";
 import { toast } from "react-toastify";
+import SearchInput from "./../Form/SearchInput.jsx";
+import useCategory from "./../hooks/useCategory.jsx";
+import { useCart } from "../../context/cart.jsx";
+import { Badge } from "antd";
+import { ShoppingOutlined } from "@ant-design/icons";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
+  const [cart] = useCart();
+  const categories = useCategory();
   const handleLogout = () => {
     setAuth({
       ...auth,
@@ -34,16 +41,41 @@ const Header = () => {
               🛒 E-Commerce
             </Link>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              <SearchInput />
               <li className="nav-item">
                 <NavLink to="/" className="nav-link navi">
                   Home
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink to="/category" className="nav-link navi">
-                  Category
-                </NavLink>
+
+              {/* Category Dropdown */}
+              <li className="nav-item dropdown">
+                <Link
+                  className="nav-link dropdown-toggle"
+                  to={"/categories"}
+                  data-bs-toggle="dropdown"
+                >
+                  Categories
+                </Link>
+                <ul className="dropdown-menu">
+                  <li>
+                    <Link className="dropdown-item" to={"/categories"}>
+                      All Categories
+                    </Link>
+                  </li>
+                  {categories?.map((c) => (
+                    <li>
+                      <Link
+                        className="dropdown-item"
+                        to={`/category/${c.slug}`}
+                      >
+                        {c.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </li>
+
               {/* Condions using ternary operators */}
               {!auth.user ? (
                 <>
@@ -73,7 +105,7 @@ const Header = () => {
                       <li>
                         <NavLink
                           to={`/dashboard/${
-                            auth?.user?.role === 1 ? 'admin' : 'user'
+                            auth?.user?.role === 1 ? "admin" : "user"
                           }`}
                           className="nav-link navi"
                         >
@@ -97,7 +129,14 @@ const Header = () => {
               )}
               <li className="nav-item">
                 <NavLink to="/cart" className="nav-link navi">
-                  Cart (0)
+                  <Badge
+                    count={cart?.length}
+                    showZero
+                    offset={[10, -5]}
+                    style={{ backgroundColor: "#52c41a" }}
+                  >
+                    <ShoppingOutlined style={{ fontSize: '22px' }} />
+                  </Badge>
                 </NavLink>
               </li>
             </ul>
