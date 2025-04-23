@@ -18,6 +18,7 @@
   "description": "This is an ecommererce website",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "braintree": "^3.29.0",
     "colors": "^1.4.0",
     "concurrently": "^9.1.2",
     "cors": "^2.8.5",

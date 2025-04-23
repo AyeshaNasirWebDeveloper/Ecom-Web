@@ -2,20 +2,20 @@ import slugify from "slugify";
 import productModel from "../models/productModel.js";
 import fs from "fs";
 import categoryModel from "../models/categoryModel.js";
-// import orderModel from "../models/orderModel.js";
+import orderModel from "../models/orderModel.js";
 
-// import braintree from "braintree";
-// import dotenv from "dotenv";
+import braintree from "braintree";
+import dotenv from "dotenv";
 
-// dotenv.config();
+dotenv.config();
 
-// //payment gateway
-// var gateway = new braintree.BraintreeGateway({
-//   environment: braintree.Environment.Sandbox,
-//   merchantId: process.env.BRAINTREE_MERCHANT_ID,
-//   publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-//   privateKey: process.env.BRAINTREE_PRIVATE_KEY,
-// });
+//payment gateway
+var gateway = new braintree.BraintreeGateway({
+  environment: braintree.Environment.Sandbox,
+  merchantId: process.env.BRAINTREE_MERCHANT_ID,
+  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+});
 
 // Create Product Controller
 export const createProductController = async (req, res) => {
@@ -195,7 +195,6 @@ export const updateProductController = async (req, res) => {
   }
 };
 
-
 // product filters
 export const productFiltersController = async (req, res) => {
   try {
@@ -330,52 +329,73 @@ export const productCategoryController = async (req, res) => {
   }
 };
 
-// //payment gateway api
-// //token
-// export const braintreeTokenController = async (req, res) => {
-//   try {
-//     gateway.clientToken.generate({}, function (err, response) {
-//       if (err) {
-//         res.status(500).send(err);
-//       } else {
-//         res.send(response);
-//       }
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+//Payment gateway controller
 
-// //payment controller
-// export const brainTreePaymentController = async (req, res) => {
-//   try {
-//     const { nonce, cart } = req.body;
-//     let total = 0;
-//     cart.map((i) => {
-//       total += i.price;
-//     });
-//     let newTransaction = gateway.transaction.sale(
-//       {
-//         amount: total,
-//         paymentMethodNonce: nonce,
-//         options: {
-//           submitForSettlement: true,
-//         },
-//       },
-//       function (error, result) {
-//         if (result) {
-//           const order = new orderModel({
-//             products: cart,
-//             payment: result,
-//             buyer: req.user._id,
-//           }).save();
-//           res.json({ ok: true });
-//         } else {
-//           res.status(500).send(error);
-//         }
-//       }
-//     );
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+//get payment token
+export const braintreeTokenController = async (req, res) => {
+  try {
+    gateway.clientToken.generate({}, function (err, response) {
+      if (err) {
+        return res.status(500).send({
+          success: false,
+          message: "Error generating token",
+          error: err
+        });
+      }
+      res.status(200).send({
+        success: true,
+        clientToken: response.clientToken
+      });
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Server error while generating token",
+      error
+    });
+  }
+};
+
+// braintree payment controller
+export const brainTreePaymentController = async (req, res) => {
+  try {
+    const { nonce, cart } = req.body;
+    let total = cart.reduce((acc, item) => acc + item.price, 0);
+    
+    let newTransaction = gateway.transaction.sale({
+      amount: total,
+      paymentMethodNonce: nonce,
+      options: {
+        submitForSettlement: true
+      }
+    }, async function (error, result) {
+      if (result?.success) {
+        const order = await new orderModel({
+          products: cart,
+          payment: result,
+          buyer: req.user._id
+        }).save();
+        
+        res.status(201).json({
+          success: true,
+          message: "Payment successful",
+          order
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: "Payment failed",
+          error: error?.message || "Unknown error"
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error during payment",
+      error: error.message
+    });
+  }
+};
