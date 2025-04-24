@@ -15,8 +15,7 @@ const Orders = () => {
 
   const getOrders = async () => {
     try {
-      const { data } = await axios.get("/api/v1/auth/orders", {
-      });
+      const { data } = await axios.get("/api/v1/auth/orders", {});
       setOrders(data);
     } catch (error) {
       console.log(error);
@@ -51,13 +50,19 @@ const Orders = () => {
 
   return (
     <Layout title={"Your Orders"}>
-      <div className="container-fluid p-3 dashboard" style={{ minHeight: "100vh" }}>
+      <div
+        className="container-fluid p-3 dashboard"
+        style={{ minHeight: "100vh" }}
+      >
         <div className="row g-0">
           <div className="col-md-3">
             <UserMenu />
           </div>
           <div className="col-md-9 px-3">
-            <div className="d-flex flex-column" style={{ height: "calc(100vh - 100px)" }}>
+            <div
+              className="d-flex flex-column"
+              style={{ height: "calc(100vh - 100px)" }}
+            >
               <h1 className="text-center mb-4">Your Orders</h1>
               <div className="flex-grow-1" style={{ overflowY: "auto" }}>
                 {orders?.length > 0 ? (
@@ -66,32 +71,53 @@ const Orders = () => {
                       <div className="card-header bg-light">
                         <div className="d-flex justify-content-between">
                           <span>Order #{order._id.substring(0, 6)}</span>
-                          <span className={`badge ${
-                            order.status === "deliverd" ? "bg-success" : 
-                            order.status === "cancel" ? "bg-danger" : "bg-primary"
-                          }`}>
+                          <span
+                            className={`badge ${
+                              order.status === "Not Process"
+                                ? "bg-dark"
+                                : order.status === "Processing"
+                                ? "bg-warning"
+                                : order.status === "Shipped"
+                                ? "bg-primary"
+                                : order.status === "Delivered"
+                                ? "bg-success"
+                                : order.status === "Cancel"
+                                ? "bg-danger"
+                                : "bg-secondary"
+                            }`}
+                          >
                             {order.status}
                           </span>
                         </div>
                         <div className="d-flex justify-content-between mt-2 small">
                           <span>{moment(order.createdAt).format("LLL")}</span>
-                          <span>Total: $
-                            {order.products.reduce(
-                              (sum, p) => sum + p.price * (p.quantity || 1),
-                              0
-                            ).toFixed(2)}
+                          <span>
+                            Total: $
+                            {order.products
+                              .reduce(
+                                (sum, p) => sum + p.price * (p.quantity || 1),
+                                0
+                              )
+                              .toFixed(2)}
                           </span>
                         </div>
                       </div>
                       <div className="card-body">
                         {order.products.map((product) => (
-                          <div className="row align-items-center mb-2" key={product._id}>
+                          <div
+                            className="row align-items-center mb-2"
+                            key={product._id}
+                          >
                             <div className="col-3 col-md-2">
                               <img
                                 src={`/api/v1/products/product-photo/${product._id}`}
                                 className="img-fluid rounded"
                                 alt={product.name}
-                                style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                                style={{
+                                  width: "60px",
+                                  height: "60px",
+                                  objectFit: "cover",
+                                }}
                               />
                             </div>
                             <div className="col-5 col-md-6">
@@ -101,7 +127,10 @@ const Orders = () => {
                               </small>
                             </div>
                             <div className="col-4 col-md-4 text-end">
-                              ${(product.price * (product.quantity || 1)).toFixed(2)}
+                              $
+                              {(
+                                product.price * (product.quantity || 1)
+                              ).toFixed(2)}
                             </div>
                           </div>
                         ))}
@@ -111,7 +140,7 @@ const Orders = () => {
                 ) : (
                   <div className="text-center py-5">
                     <h4>No orders found</h4>
-                    <button 
+                    <button
                       className="btn btn-primary mt-3"
                       onClick={() => navigate("/")}
                     >

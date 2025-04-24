@@ -1,0 +1,136 @@
+/* Mobile Responsiveness Styles */
+@media (max-width: 768px) {
+    /* Container adjustments */
+    .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  
+    /* Layout adjustments */
+    .row {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  
+    /* Sidebar - hide on mobile */
+    .col-md-3 {
+      display: none;
+    }
+  
+    /* Main content - full width on mobile */
+    .col-md-9 {
+      padding-left: 15px;
+      padding-right: 15px;
+      width: 100%;
+      max-width: 100%;
+      flex: 0 0 100%;
+    }
+  
+    /* Table adjustments */
+    .ant-table {
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+    }
+  
+    .ant-table-thead > tr > th,
+    .ant-table-tbody > tr > td {
+      padding: 8px !important;
+      white-space: nowrap;
+    }
+  
+    /* Status dropdown */
+    .ant-select {
+      width: 120px !important;
+    }
+  
+    /* Product cards in expanded view */
+    .ant-table-expanded-row .card {
+      margin-bottom: 10px;
+    }
+  
+    .ant-table-expanded-row .row {
+      flex-direction: column;
+    }
+  
+    .ant-table-expanded-row .col-md-2,
+    .ant-table-expanded-row .col-md-6,
+    .ant-table-expanded-row .col-md-4 {
+      width: 100%;
+      max-width: 100%;
+      flex: 0 0 100%;
+      text-align: left !important;
+      margin-bottom: 10px;
+    }
+  
+    /* Product image */
+    .ant-table-expanded-row .ant-image {
+      display: block;
+      margin: 0 auto;
+    }
+  
+    /* Hide less important columns on mobile */
+    .ant-table-thead > tr > th:nth-child(3), /* Buyer */
+    .ant-table-thead > tr > th:nth-child(5), /* Payment */
+    .ant-table-tbody > tr > td:nth-child(3),
+    .ant-table-tbody > tr > td:nth-child(5) {
+      display: none;
+    }
+  
+    /* Center align table headers */
+    .ant-table-thead > tr > th {
+      text-align: center;
+    }
+  
+    /* Center align table cells */
+    .ant-table-tbody > tr > td {
+      text-align: center;
+    }
+  
+    /* Status dropdown alignment */
+    .ant-table-tbody > tr > td:nth-child(2) {
+      display: flex;
+      justify-content: center;
+    }
+  
+    /* Adjust heading size */
+    h1.text-center {
+      font-size: 1.5rem;
+      margin-bottom: 1rem !important;
+    }
+  
+    /* Empty state card */
+    .ant-card .text-center {
+      padding: 20px 10px;
+    }
+  
+    /* Badge adjustments */
+    .ant-badge {
+      font-size: 12px;
+    }
+  }
+  
+  /* Small mobile devices */
+  @media (max-width: 480px) {
+    /* Further reduce padding */
+    .col-md-9 {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  
+    /* Hide date column */
+    .ant-table-thead > tr > th:nth-child(4),
+    .ant-table-tbody > tr > td:nth-child(4) {
+      display: none;
+    }
+  
+    /* Make status dropdown smaller */
+    .ant-select {
+      width: 100px !important;
+    }
+  
+    /* Product description */
+    .ant-table-expanded-row .ant-typography-secondary {
+      font-size: 12px;
+    }
+  }

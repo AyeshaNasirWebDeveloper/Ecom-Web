@@ -230,70 +230,135 @@ export const updateProfileController = async (req, res) => {
   }
 };
 
-// get orders
-export const getOrdersController = async (req, res) => {
-  try {
-    const orders = await orderModel
-      .find({ buyer: req.user._id })
-      .populate("products", "-photo")
-      .populate("buyer", "name");
-    res.json(orders);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Error WHile Geting Orders",
-      error,
-    });
-  }
-};
-//get all orders
+// Get all orders (admin)
 export const getAllOrdersController = async (req, res) => {
   try {
     const orders = await orderModel
       .find({})
-      .populate("products", "-photo")
-      .populate("buyer", "name")
-      .sort({ createdAt: "-1" });
-    res.json(orders);
+      .populate({
+        path: 'products',
+        select: '-photo',
+      })
+      .populate({
+        path: 'buyer',
+        select: 'name email',
+      })
+      .sort({ createdAt: -1 }) 
+      .lean(); // Convert to plain JavaScript objects
+
+    if (!orders || orders.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No orders found",
+        orders: []
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "All orders fetched successfully",
+      orders
+    });
   } catch (error) {
-    console.log(error);
-    res.status(500).send({
+    console.error("Error fetching orders:", error);
+    res.status(500).json({
       success: false,
-      message: "Error WHile Geting Orders",
-      error,
+      message: "Error while getting orders",
+      error: error.message // Send only error message in production
     });
   }
 };
 
-//order status
+
+// Get user orders
+export const getOrdersController = async (req, res) => {
+  try {
+    const orders = await orderModel
+      .find({ buyer: req.user._id })
+      .populate({
+        path: 'products',
+        select: 'name price description',
+      })
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      message: "User orders fetched successfully",
+      orders
+    });
+  } catch (error) {
+    console.error("Error fetching user orders:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error while getting user orders",
+      error: error.message
+    });
+  }
+};
+
+
+// Update order status
 export const orderStatusController = async (req, res) => {
   try {
     const { orderId } = req.params;
     const { status } = req.body;
-    const orders = await orderModel.findByIdAndUpdate(
+
+    // Validate status input
+    const validStatuses = ["Not Process", "Processing", "Shipped", "Delivered", "Cancel"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status value"
+      });
+    }
+
+    const updatedOrder = await orderModel.findByIdAndUpdate(
       orderId,
       { status },
-      { new: true }
-    );
-    res.json(orders);
+      { new: true, runValidators: true }
+    ).populate('buyer', 'name email');
+
+    if (!updatedOrder) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Order status updated successfully",
+      order: updatedOrder
+    });
   } catch (error) {
-    console.log(error);
-    res.status(500).send({
+    console.error("Error updating order status:", error);
+    res.status(500).json({
       success: false,
-      message: "Error While Updateing Order",
-      error,
+      message: "Error while updating order",
+      error: error.message
     });
   }
 };
 
-// checkout controller
+
+// Checkout controller
 export const checkoutController = async (req, res) => {
   try {
     const { cart } = req.body;
     const user = req.user;
 
-    // Create order with full product details
+    if (!cart || !Array.isArray(cart) || cart.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Cart is empty or invalid"
+      });
+    }
+
+    // Calculate total
+    const total = cart.reduce((sum, item) => {
+      return sum + (item.price * (item.quantity || 1));
+    }, 0);
+
     const order = new orderModel({
       products: cart.map(item => ({
         _id: item._id,
@@ -304,20 +369,31 @@ export const checkoutController = async (req, res) => {
       })),
       buyer: user._id,
       status: "Not Process",
+      total, // Add total to order
       payment: {
         success: true,
-        method: "COD" // Cash on Delivery
+        method: "COD"
       }
     });
 
     await order.save();
-    res.status(201).json(order);
+
+    // Populate the response
+    const populatedOrder = await orderModel.findById(order._id)
+      .populate('buyer', 'name email')
+      .populate('products._id', 'name price');
+
+    res.status(201).json({
+      success: true,
+      message: "Order created successfully",
+      order: populatedOrder
+    });
   } catch (error) {
-    console.log(error);
-    res.status(500).send({
+    console.error("Error during checkout:", error);
+    res.status(500).json({
       success: false,
       message: "Error while creating order",
-      error,
+      error: error.message
     });
   }
 };

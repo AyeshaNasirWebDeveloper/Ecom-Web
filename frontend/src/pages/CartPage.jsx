@@ -301,7 +301,7 @@ const CartPage = () => {
                       onClick={handleCheckout}
                       disabled={loading || !auth?.user?.address}
                     >
-                      {loading ? "Processing..." : "Proceed to Checkout"}
+                      {loading ? "Placing..." : "Place your order"}
                     </button>
                   )}
                 </div>

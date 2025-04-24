@@ -25,6 +25,7 @@ import CategoryProduct from './pages/CategoryProduct.jsx';
 import CartPage from './pages/CartPage.jsx';
 import Categories from './pages/Categories.jsx';
 import ProductDetails from "./pages/ProductDetails.jsx";
+import AdminOrders from "./pages/Admin/AdminOrders.jsx";
 
 const App = () => {
   return (
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="admin/products/:slug" element={<UpdateProduct />} />
           <Route path="admin/products" element={<Products />} />
           <Route path="admin/users" element={<Users />} />
+          <Route path="admin/orders" element={<AdminOrders />} />
         </Route>
 
         <Route path="/register" element={<Register />} />

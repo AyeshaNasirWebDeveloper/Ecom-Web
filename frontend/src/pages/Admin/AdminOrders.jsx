@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import AdminMenu from "../../components/Layout/AdminMenu.jsx";
-import Layout from "../../components/Layout/Layout.jsx";
-import { useAuth } from "../../context/auth.jsx";
+import AdminMenu from "../../components/Layout/AdminMenu";
+import Layout from "../../components/Layout/Layout";
+import { useAuth } from "../../context/auth";
 import moment from "moment";
-import { Select, Spin } from "antd";
+import { Select, Spin, Table, Card, Image, Typography, Badge } from "antd";
+import "../../styles/AdminOrders.css"
+
 const { Option } = Select;
+const { Text } = Typography;
+
+// Define status options outside component to prevent recreation on each render
+const STATUS_OPTIONS = [
+  "Not Process",
+  "Processing",
+  "Shipped",
+  "Delivered",
+  "Cancel",
+];
 
 const AdminOrders = () => {
-  const [status, setStatus] = useState([
-    "Not Process",
-    "Processing",
-    "Shipped",
-    "Delivered",
-    "Cancel"
-  ]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [auth] = useAuth();
@@ -23,15 +28,11 @@ const AdminOrders = () => {
   const getOrders = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("/api/v1/auth/all-orders", {
-        headers: {
-          Authorization: `Bearer ${auth?.token}`
-        }
-      });
-      setOrders(data);
+      const { data } = await axios.get("/api/v1/auth/all-orders");
+      setOrders(data?.orders || []);
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to fetch orders");
+      console.error("Fetch orders error:", error);
+      toast.error(error.response?.data?.message || "Failed to fetch orders");
     } finally {
       setLoading(false);
     }
@@ -43,26 +44,73 @@ const AdminOrders = () => {
 
   const handleStatusChange = async (orderId, value) => {
     try {
-      const { data } = await axios.put(
-        `/api/v1/auth/order-status/${orderId}`,
-        { status: value },
-        {
-          headers: {
-            Authorization: `Bearer ${auth?.token}`
-          }
-        }
-      );
+      await axios.put(`/api/v1/auth/order-status/${orderId}`, { status: value });
       toast.success("Order status updated");
-      getOrders(); // Refresh orders after update
+      getOrders(); // Refresh the orders list
     } catch (error) {
-      console.error(error);
+      console.error("Update status error:", error);
       toast.error(error.response?.data?.message || "Failed to update status");
     }
   };
 
+  const columns = [
+    {
+      title: '#',
+      dataIndex: 'index',
+      key: 'index',
+      render: (_, __, index) => index + 1,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (currentStatus, record) => (
+        <Select
+          value={currentStatus}
+          onChange={(value) => handleStatusChange(record._id, value)}
+          style={{ width: 150 }}
+        >
+          {STATUS_OPTIONS.map(option => (
+            <Option key={option} value={option}>
+              {option}
+            </Option>
+          ))}
+        </Select>
+      ),
+    },
+    {
+      title: 'Buyer',
+      dataIndex: ['buyer', 'name'],
+      key: 'buyer',
+    },
+    {
+      title: 'Date',
+      dataIndex: 'createdAt',
+      key: 'date',
+      render: date => moment(date).fromNow(),
+    },
+    {
+      title: 'Payment',
+      dataIndex: ['payment', 'success'],
+      key: 'payment',
+      render: success => (
+        <Badge 
+          status={success ? 'success' : 'error'} 
+          text={success ? 'Success' : 'Failed'} 
+        />
+      ),
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'products',
+      key: 'quantity',
+      render: products => products?.length || 0,
+    },
+  ];
+
   if (loading) {
     return (
-      <Layout title={"All Orders Data"}>
+      <Layout title="All Orders">
         <div className="text-center mt-5">
           <Spin size="large" />
         </div>
@@ -71,85 +119,65 @@ const AdminOrders = () => {
   }
 
   return (
-    <Layout title={"All Orders Data"}>
-      <div className="row dashboard">
-        <div className="col-md-3">
-          <AdminMenu />
-        </div>
-        <div className="col-md-9">
-          <h1 className="text-center">All Orders</h1>
-          {orders?.length === 0 ? (
-            <div className="text-center mt-5">
-              <h4>No orders found</h4>
-            </div>
-          ) : (
-            orders?.map((order, index) => (
-              <div className="border shadow mb-4" key={order._id}>
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Buyer</th>
-                      <th scope="col">Date</th>
-                      <th scope="col">Payment</th>
-                      <th scope="col">Quantity</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{index + 1}</td>
-                      <td>
-                        <Select
-                          bordered={false}
-                          onChange={(value) => handleStatusChange(order._id, value)}
-                          defaultValue={order?.status}
-                          style={{ width: 150 }}
-                        >
-                          {status.map((statusItem, i) => (
-                            <Option key={i} value={statusItem}>
-                              {statusItem}
-                            </Option>
-                          ))}
-                        </Select>
-                      </td>
-                      <td>{order?.buyer?.name}</td>
-                      <td>{moment(order?.createdAt).fromNow()}</td>
-                      <td>
-                        {order?.payment?.success ? (
-                          <span className="text-success">Success</span>
-                        ) : (
-                          <span className="text-danger">Failed</span>
-                        )}
-                      </td>
-                      <td>{order?.products?.length}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div className="container">
-                  {order?.products?.map((product) => (
-                    <div className="row mb-2 p-3 card flex-row" key={product._id}>
-                      <div className="col-md-4">
-                        <img
-                          src={`/api/v1/product/product-photo/${product._id}`}
-                          className="card-img-top"
-                          alt={product.name}
-                          width="100px"
-                          height="100px"
-                          style={{ objectFit: "cover" }}
-                        />
-                      </div>
-                      <div className="col-md-8">
-                        <h5>{product.name}</h5>
-                        <p>{product.description?.substring(0, 50)}...</p>
-                        <p>Price: ${product.price}</p>
-                      </div>
-                    </div>
-                  ))}
+    <Layout title="All Orders">
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-md-3">
+            <AdminMenu />
+          </div>
+          <div className="col-md-9">
+            <h1 className="text-center my-4">Order Details</h1>
+            {orders.length === 0 ? (
+              <Card>
+                <div className="text-center p-5">
+                  <h4>No orders found</h4>
                 </div>
-              </div>
-            ))
-          )}
+              </Card>
+            ) : (
+              <Table
+                columns={columns}
+                dataSource={orders}
+                rowKey="_id"
+                expandable={{
+                  expandedRowRender: record => (
+                    <div className="p-3">
+                      <h5>Products</h5>
+                      {record.products.map(product => (
+                        <Card key={product._id} className="mb-3">
+                          <div className="row align-items-center">
+                            <div className="col-md-2">
+                              <Image
+                                src={`/api/v1/products/product-photo/${product._id}`}
+                                width={80}
+                                height={80}
+                                alt={product.name}
+                                style={{ objectFit: 'cover' }}
+                              />
+                            </div>
+                            <div className="col-md-6">
+                              <Text strong>{product.name}</Text>
+                              <Text type="secondary" ellipsis>
+                                {product.description?.substring(0, 50)}...
+                              </Text>
+                              <div className="mt-2">
+                                <Text>Price: ${product.price}</Text>
+                                <Text className="ms-3">Qty: {product.quantity || 1}</Text>
+                              </div>
+                            </div>
+                            <div className="col-md-4 text-end">
+                              <Text strong>
+                                ${(product.price * (product.quantity || 1)).toFixed(2)}
+                              </Text>
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  ),
+                }}
+              />
+            )}
+          </div>
         </div>
       </div>
     </Layout>
