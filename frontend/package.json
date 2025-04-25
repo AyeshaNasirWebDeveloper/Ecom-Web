@@ -6,14 +6,13 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "prebuild": "rd /s /q node_modules && npm install",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "proxy": "http://localhost:8080"
   },
   "engines": {
-    "node": "18.x"
+    "node": "20"
   },
   "dependencies": {
     "antd": "^5.24.7",
