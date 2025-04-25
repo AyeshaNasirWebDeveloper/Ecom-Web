@@ -5,7 +5,7 @@ import { Prices } from "../components/Prices.jsx";
 import { useCart } from "../context/cart.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Layout from "./../components/Layout/Layout.jsx";
+import Layout from "../components/Layout/Layout.jsx";
 import { AiOutlineReload } from "react-icons/ai";
 import { motion } from "framer-motion";
 import "../styles/Homepage.css";
