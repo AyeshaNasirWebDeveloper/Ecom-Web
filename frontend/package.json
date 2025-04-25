@@ -13,7 +13,7 @@
     "proxy": "http://localhost:8080"
   },
   "engines": {
-    "node": "22.x"
+    "node": "18.x"
   },
   "dependencies": {
     "antd": "^5.24.7",
