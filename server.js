@@ -3,51 +3,47 @@ import colors from "colors";
 import "dotenv/config";
 import morgan from "morgan";
 import connectDB from "./database/db.js";
-import authRoute from "./routes/authRoute.js"
-import categoryRoute from "./routes/categoryRoute.js"
-import productRoutes from "./routes/productRoute.js"
-import cors from "cors"
+import authRoute from "./routes/authRoute.js";
+import categoryRoute from "./routes/categoryRoute.js";
+import productRoutes from "./routes/productRoute.js";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // database
 connectDB();
+
+// fix __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // rest object
 const app = express();
 
 // middleware
-// app.use(cors)
-app.use(express.json());
-app.use(morgan("dev"));
-
-// Server Static Files from React
-// app.use('/', express.static(path.join(path.resolve(), 'frontend/dist/index.html')))
-
-// Connecting frontend to backend
-// Enable CORS properly
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'http://localhost:5173', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
-
-// Handle preflight requests
 app.options('*', cors());
+app.use(express.json());
+app.use(morgan("dev"));
 
-// endpoint or routes
-app.use('/api/v1/auth', authRoute)
-app.use('/api/v1/category', categoryRoute)
-app.use('/api/v1/products', productRoutes)
+// routes
+app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/category', categoryRoute);
+app.use('/api/v1/products', productRoutes);
 
-// rest api
-app.get("/", (req, res) => {
-  res.send("<h1>Welcome to the E-Commerce Website</h1>");
+// production static files
+app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
 });
 
-// port
+// server start
 const PORT = process.env.PORT || 5050;
-
-// run listen
 app.listen(PORT, () => {
   console.log(`Server is running Successfully on port ${PORT}`.bgMagenta.white);
 });
