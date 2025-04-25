@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Layout from "./../components/Layout/Layout.jsx";
+import Layout from "@/components/Layout/Layout";
 import { useCart } from "../context/cart.jsx";
 import { useAuth } from "../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ import "../styles/CartStyles.css";
 const CartPage = () => {
   const [auth] = useAuth();
   const [cart, setCart] = useCart();
-  const [instance] = useState("");
+  // const [instance] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 

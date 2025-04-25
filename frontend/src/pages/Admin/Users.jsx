@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Layout from "../../components/Layout/Layout.jsx";
+import Layout from "@/components/Layout/Layout";
 import AdminMenu from "../../components/Layout/AdminMenu.jsx";
 import { Table, Tag, Space, Avatar, Badge } from "antd";
 import moment from "moment";

@@ -8,14 +8,12 @@ import categoryRoute from "./routes/categoryRoute.js";
 import productRoutes from "./routes/productRoute.js";
 import cors from "cors";
 import path from "path";
-import { fileURLToPath } from "url";
 
 // database
 connectDB();
 
 // fix __dirname in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.resolve()
 
 // rest object
 const app = express();
@@ -37,9 +35,9 @@ app.use('/api/v1/category', categoryRoute);
 app.use('/api/v1/products', productRoutes);
 
 // production static files
-app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
 });
 
 // server start
