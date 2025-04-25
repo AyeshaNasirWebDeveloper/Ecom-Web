@@ -1,7 +1,7 @@
 import React from "react";
-import Layout from "../../components/layout/Layout";
-import { useAuth } from './../../context/auth';
-import UserMenu from "../../components/layout/UserMenu";
+import Layout from "../../components/Layout/Layout.jsx";
+import { useAuth } from './../../context/auth.jsx';
+import UserMenu from "../../components/Layout/UserMenu.jsx";
 
 const Dashboard = () => {
   const [auth] = useAuth()

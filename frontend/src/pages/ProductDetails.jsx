@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Layout from "./../components/Layout/Layout";
+import Layout from "./../components/Layout/Layout.jsx";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "../styles/ProductDetailsStyles.css";
-import { useCart } from "../context/cart";
+import { useCart } from "../context/cart.jsx";
 import { toast } from "react-toastify";
 const ProductDetails = () => {
   const params = useParams();

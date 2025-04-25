@@ -82,33 +82,33 @@ const CartPage = () => {
   // }, [auth?.token]);
 
   // Handle payment
-  const handlePayment = async () => {
-    try {
-      if (!instance) {
-        toast.error("Payment gateway is not ready");
-        return;
-      }
+  // const handlePayment = async () => {
+  //   try {
+  //     if (!instance) {
+  //       toast.error("Payment gateway is not ready");
+  //       return;
+  //     }
 
-      setLoading(true);
-      const { nonce } = await instance.requestPaymentMethod();
-      await axios.post("/api/v1/products/braintree/payment", {
-        nonce,
-        cart,
-      });
+  //     setLoading(true);
+  //     const { nonce } = await instance.requestPaymentMethod();
+  //     await axios.post("/api/v1/products/braintree/payment", {
+  //       nonce,
+  //       cart,
+  //     });
 
-      localStorage.removeItem("cart");
-      setCart([]);
-      navigate("/dashboard/user/orders");
-      toast.success("Payment completed successfully!");
-    } catch (error) {
-      console.log(error);
-      toast.error(
-        error.response?.data?.message || "Payment failed. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     localStorage.removeItem("cart");
+  //     setCart([]);
+  //     navigate("/dashboard/user/orders");
+  //     toast.success("Payment completed successfully!");
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(
+  //       error.response?.data?.message || "Payment failed. Please try again."
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   // cart checkout
   const handleCheckout = async () => {

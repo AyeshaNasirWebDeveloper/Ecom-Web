@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import UserMenu from "../../components/layout/UserMenu.jsx";
+import UserMenu from "../../components/Layout/UserMenu.jsx";
 import Layout from "./../../components/Layout/Layout.jsx";
 import { useAuth } from "../../context/auth.jsx";
 import { toast } from "react-toastify";
