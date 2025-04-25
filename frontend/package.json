@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "vite",
+    "prebuild": "rd /s /q node_modules && del package-lock.json && npm install",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
