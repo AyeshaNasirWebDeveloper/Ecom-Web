@@ -1,26 +1,37 @@
+/* Global Resets */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Banner Image */
 .banner-img {
   margin-top: 60px;
 }
 
+/* Typography */
 .home-page h1 {
   color: gray;
   font-family: "Playfair Display", serif;
 }
 
+/* Home Page Layout */
 .home-page {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: row;
 }
 .home-page .card {
   background-color: rgba(128, 128, 128, 0.097);
   width: 18rem;
+  transition: all 0.3s ease;
+  border: 1px solid #eee;
 }
 .home-page .card-name-price {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
 }
-
 .home-page .card-price {
   color: green;
   font-weight: bold;
@@ -33,39 +44,39 @@
   font-size: 14px;
   font-weight: bold;
 }
-
 .home-page .card-text {
   color: rgb(90, 89, 89);
 }
-
 .home-page .card img:hover {
   transform: scale(0.9);
 }
-
 .home-page .card-img-top {
   height: 300px !important;
+  object-fit: cover;
+  transition: transform 0.3s ease;
 }
-/* ==================
-filters
-============== */
+
+/* Product Card Hover */
+.product-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Filters */
 .filters h4 {
   margin-top: 100px;
   color: gray !important;
   border-bottom: 1px solid rgba(128, 128, 128, 0.337);
 }
-
-.ant-checkbox-wrapper:first-of-type {
-  margin-left: 8px;
-}
-
 .ant-checkbox-wrapper {
   margin: 2px;
+}
+.ant-checkbox-wrapper:first-of-type {
+  margin-left: 8px;
 }
 .ant-radio-wrapper {
   margin-bottom: 5px !important;
   margin-left: 10px;
 }
-
 .filters button {
   background-color: black;
   width: 100%;
@@ -74,8 +85,127 @@ filters
   margin-top: 20px;
 }
 
+/* Load More Button */
 .loadmore {
   color: green;
   font-weight: bold;
   font-size: 20px !important;
+  min-width: 150px;
+}
+
+/* Carousel Container */
+.carousel-outer-container,
+.responsive-carousel,
+.slider {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+/* Slides */
+.slider img,
+.slide-container img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  border-radius: 10px;
+  animation: slideFade 6s infinite;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+.slide-container img:hover {
+  transform: scale(1.02);
+  opacity: 0.95;
+}
+
+/* Animation */
+@keyframes slideFade {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .home-page {
+    flex-direction: column;
+  }
+
+  .home-page .card {
+    width: 100% !important;
+    margin-bottom: auto;
+  }
+
+  .home-page h1 {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .slide-container img {
+    max-height: 150px;
+  }
+
+  .product-card {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .responsive-carousel .slide-container {
+    padding-top: 30%;
+  }
+
+  .ant-carousel .slick-slide img {
+    height: 200px;
+  }
+
+  .edge-to-edge-carousel {
+    padding-bottom: 40%;
+  }
+
+  .slider {
+    margin-top: 0 !important;
+  }
+
+  .slider img {
+    object-fit: cover;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .slide-container img {
+    max-height: 300px;
+  }
+
+  .slider img {
+    object-fit: contain;
+  }
+}
+
+/* Fix top spacing on mobile and tablet */
+@media (max-width: 991px) {
+  .slider {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .responsive-carousel .slide-container {
+    padding-top: 0 !important;
+  }
+
+  .carousel-outer-container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .slide-container img,
+  .slider img {
+    max-height: 400px !important;
+    height: auto;
+    object-fit: cover !important;
+  }
 }

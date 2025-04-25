@@ -1,72 +1,103 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaFacebook, FaInstagram, FaTiktok, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaTiktok, FaTwitter, FaHeart } from "react-icons/fa";
+import "../../styles/Footer.css";
 
 const Footer = () => {
   return (
-    <>
-      <div class="main py-2">
-        <footer className="pt-5">
-          <ul className="nav justify-content-center text-white">
-            <li className="nav-item">
-              <Link to="/about" className="nav-link px-2 text-body-secondary text">
-                About *
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/contact" className="nav-link px-2 text-body-secondary text">
-                Contact US *
-              </Link>
-            </li>
-            <li className="nav-item ">
-              <Link to="/policy" className="nav-link px-2 text-body-secondary text">
-                Privacy Policy *
-              </Link>
-            </li>
-          </ul>
-        </footer>
-        <div className="footer container-fluid">
-          <footer className="d-flex flex-wrap justify-content-between align-items-center">
-            <div className="col-md-4 d-flex align-items-center">
-              <link
-                href="/"
-                className=" me-2 mb-md-0 text-body-secondary text-decoration-none lh-1"
-              />
-              
-              <span className="pb-2 mb-md-0 text-body-secondary texts my-3">
-              🛒 © 2025 Ayesha, Dev. All rights reserved.
-              </span>
+    <footer className="site-footer">
+      <div className="footer-top">
+        <div className="container">
+          <div className="footer-links">
+            <div className="footer-links-column">
+              <h3 className="footer-title">Quick Links</h3>
+              <ul className="footer-nav">
+                <li className="footer-nav-item">
+                  <Link 
+                    to="/about" 
+                    className="footer-link"
+                    data-text="About"
+                  >
+                    About
+                  </Link>
+                </li>
+                <li className="footer-nav-item">
+                  <Link 
+                    to="/contact" 
+                    className="footer-link"
+                    data-text="Contact Us"
+                  >
+                    Contact Us
+                  </Link>
+                </li>
+                <li className="footer-nav-item">
+                  <Link 
+                    to="/policy" 
+                    className="footer-link"
+                    data-text="Privacy Policy"
+                  >
+                    Privacy Policy
+                  </Link>
+                </li>
+              </ul>
             </div>
-            <ul className="nav col-md-4 justify-content-end list-unstyled d-flex ">
-              <li className="ms-3">
-                <link className="text-body-secondary texts" />
-                <svg className="bi" width={24} height={24}>
-                  <FaTwitter />
-                </svg>
-              </li>
-              <li className="ms-3">
-                <link className="text-body-secondary" />
-                <svg className="bi" width={24} height={24}>
-                  <FaInstagram />
-                </svg>
-              </li>
-              <li className="ms-3">
-                <link className="text-body-secondary" />
-                <svg className="bi" width={24} height={24}>
-                  <FaFacebook />
-                </svg>
-              </li>
-              <li className="ms-3">
-                <link className="text-body-secondary" />
-                <svg className="bi" width={24} height={24}>
-                  <FaTiktok />
-                </svg>
-              </li>
-            </ul>
-          </footer>
+            
+            <div className="footer-links-column">
+              <h3 className="footer-title">Connect With Us</h3>
+              <div className="social-links">
+                <a 
+                  href="https://twitter.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="social-link"
+                  aria-label="Twitter"
+                >
+                  <FaTwitter className="social-icon" />
+                </a>
+                <a 
+                  href="https://instagram.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="social-link"
+                  aria-label="Instagram"
+                >
+                  <FaInstagram className="social-icon" />
+                </a>
+                <a 
+                  href="https://facebook.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="social-link"
+                  aria-label="Facebook"
+                >
+                  <FaFacebook className="social-icon" />
+                </a>
+                <a 
+                  href="https://tiktok.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="social-link"
+                  aria-label="TikTok"
+                >
+                  <FaTiktok className="social-icon" />
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </>
+      
+      <div className="footer-bottom">
+        <div className="container">
+          <div className="copyright">
+            <p>
+              Made with <FaHeart className="heart-icon" /> by Ayesha Nasir © {new Date().getFullYear()} 
+              <span className="brand-name"> E-Commerce</span>. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 };
 

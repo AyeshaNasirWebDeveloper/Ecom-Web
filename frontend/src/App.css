@@ -1,0 +1,10 @@
+/* Custom scroll behavior */
+html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Better focus states */
+  button:focus, a:focus {
+    outline: 2px solid rgba(79, 70, 229, 0.5);
+    outline-offset: 2px;
+  }

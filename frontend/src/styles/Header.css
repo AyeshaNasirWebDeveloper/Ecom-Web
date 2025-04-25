@@ -1,0 +1,214 @@
+/* Header.css */
+.header-container {
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbar {
+    padding: 0.8rem 1rem;
+  }
+  
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: white !important;
+    transition: transform 0.3s ease;
+  }
+  
+  .navbar-brand:hover {
+    transform: scale(1.05);
+  }
+  
+  .logo-icon {
+    margin-right: 8px;
+    font-size: 1.8rem;
+  }
+  
+  .logo-text {
+    background: linear-gradient(to right, #fff, #e0e0e0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    margin: 0 0.2rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  
+  .nav-link:hover {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+  
+  .nav-link:hover::after {
+    width: 70%;
+  }
+  
+  .dropdown-menu {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 0;
+  }
+  
+  .dropdown-item {
+    padding: 0.5rem 1.5rem;
+    transition: all 0.2s ease;
+  }
+  
+  .dropdown-item:hover {
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white !important;
+  }
+  
+  /* User menu */
+  .user-menu {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-icon {
+    margin-right: 8px;
+    font-size: 1.1rem;
+  }
+  
+  .user-name {
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Cart */
+  .cart-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .cart-link {
+    display: flex;
+    align-items: center;
+  }
+  
+  .cart-icon {
+    font-size: 1.4rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .cart-text {
+    margin-left: 6px;
+    display: inline-block;
+  }
+  
+  .cart-badge .ant-badge-count {
+    font-weight: 600;
+  }
+  
+  .cart-link:hover .cart-icon {
+    transform: scale(1.1) rotate(-10deg);
+  }
+  
+  /* Search */
+  .search-container {
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    flex-grow: 1;
+    max-width: 500px;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 992px) {
+    .navbar-collapse {
+      padding-top: 1rem;
+    }
+    
+    .search-container {
+      max-width: 100%;
+      margin: 0 0 1rem 0;
+      order: -1;
+    }
+    
+    .nav-link {
+      margin: 0.2rem 0;
+      padding: 0.8rem 1rem !important;
+    }
+    
+    .dropdown-menu {
+      margin-left: 1rem;
+      box-shadow: none;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .dropdown-item {
+      color: rgba(255, 255, 255, 0.8) !important;
+    }
+    
+    .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .navbar-brand {
+      font-size: 1.3rem;
+    }
+    
+    .logo-icon {
+      font-size: 1.5rem;
+    }
+    
+    .user-name {
+      max-width: 80px;
+    }
+    
+    .cart-text {
+      display: none;
+    }
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .navbar-collapse.show {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  /* Toggle button */
+  .navbar-toggler {
+    border: none;
+    padding: 0.5rem;
+  }
+  
+  .navbar-toggler:focus {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }

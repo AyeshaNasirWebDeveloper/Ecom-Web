@@ -9,6 +9,7 @@ import {
   getAllOrdersController,
   orderStatusController,
   checkoutController,
+  getAllUsers,
 } from "../controllers/authController.js";
 import { isAdmin, requireSignIn } from "../middleware/authMiddleware.js";
 
@@ -58,5 +59,8 @@ router.put(
 
 // checkout route
 router.post("/checkout", requireSignIn, checkoutController);
+
+// getting all users data 
+router.get("/all-users", requireSignIn, isAdmin, getAllUsers);
 
 export default router;

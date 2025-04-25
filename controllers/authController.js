@@ -276,25 +276,34 @@ export const getOrdersController = async (req, res) => {
     const orders = await orderModel
       .find({ buyer: req.user._id })
       .populate({
-        path: 'products',
-        select: 'name price description',
+        path: 'products.product',
+        select: 'name price description photo',
       })
       .sort({ createdAt: -1 });
 
+    if (!orders || orders.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No orders found",
+        orders: []
+      });
+    }
+
     res.status(200).json({
       success: true,
-      message: "User orders fetched successfully",
+      message: "Orders fetched successfully",
       orders
     });
   } catch (error) {
-    console.error("Error fetching user orders:", error);
+    console.error("Error fetching orders:", error);
     res.status(500).json({
       success: false,
-      message: "Error while getting user orders",
+      message: "Error while getting orders",
       error: error.message
     });
   }
 };
+
 
 
 // Update order status
@@ -347,6 +356,7 @@ export const checkoutController = async (req, res) => {
     const { cart } = req.body;
     const user = req.user;
 
+    // Validate input
     if (!cart || !Array.isArray(cart) || cart.length === 0) {
       return res.status(400).json({
         success: false,
@@ -354,46 +364,63 @@ export const checkoutController = async (req, res) => {
       });
     }
 
-    // Calculate total
-    const total = cart.reduce((sum, item) => {
-      return sum + (item.price * (item.quantity || 1));
+    // Calculate total amount
+    const totalAmount = cart.reduce((total, item) => {
+      const price = item.price || 0;
+      const quantity = item.quantity || 1;
+      return total + (price * quantity);
     }, 0);
 
+    // Create order
     const order = new orderModel({
       products: cart.map(item => ({
-        _id: item._id,
-        name: item.name,
-        price: item.price,
+        product: item._id,
         quantity: item.quantity || 1,
-        description: item.description
+        price: item.price
       })),
+      payment: {
+        method: "COD",
+        status: "Pending"
+      },
       buyer: user._id,
       status: "Not Process",
-      total, // Add total to order
-      payment: {
-        success: true,
-        method: "COD"
-      }
+      totalAmount,
+      shippingAddress: user.address
     });
 
-    await order.save();
-
-    // Populate the response
-    const populatedOrder = await orderModel.findById(order._id)
-      .populate('buyer', 'name email')
-      .populate('products._id', 'name price');
-
+    const savedOrder = await order.save();
+    
     res.status(201).json({
       success: true,
       message: "Order created successfully",
-      order: populatedOrder
+      order: savedOrder
     });
+
   } catch (error) {
-    console.error("Error during checkout:", error);
+    console.error("Checkout error:", error);
     res.status(500).json({
       success: false,
       message: "Error while creating order",
       error: error.message
+    });
+  }
+};
+
+// authController.js
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await userModel.find({}).select("-password");
+    res.status(200).send({
+      success: true,
+      message: "All users fetched successfully",
+      users,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in getting all users",
+      error,
     });
   }
 };

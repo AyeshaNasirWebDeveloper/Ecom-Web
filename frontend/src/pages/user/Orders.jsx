@@ -15,18 +15,23 @@ const Orders = () => {
 
   const getOrders = async () => {
     try {
-      const { data } = await axios.get("/api/v1/auth/orders", {});
-      setOrders(data);
+      const { data } = await axios.get("/api/v1/auth/orders");
+      // Ensure we're using the correct data structure
+      setOrders(data?.orders || []);
     } catch (error) {
-      console.log(error);
-      toast.error("Failed to fetch orders");
+      console.error("Orders error:", error.response?.data || error.message);
+      toast.error(error.response?.data?.message || "Failed to fetch orders");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    getOrders();
+    if (auth?.token) {
+      getOrders();
+    } else {
+      setLoading(false);
+    }
   }, [auth?.token]);
 
   if (loading) {
@@ -76,7 +81,7 @@ const Orders = () => {
                               order.status === "Not Process"
                                 ? "bg-dark"
                                 : order.status === "Processing"
-                                ? "bg-warning"
+                                ? "bg-warning text-dark"
                                 : order.status === "Shipped"
                                 ? "bg-primary"
                                 : order.status === "Delivered"
@@ -91,46 +96,46 @@ const Orders = () => {
                         </div>
                         <div className="d-flex justify-content-between mt-2 small">
                           <span>{moment(order.createdAt).format("LLL")}</span>
-                          <span>
-                            Total: $
-                            {order.products
-                              .reduce(
-                                (sum, p) => sum + p.price * (p.quantity || 1),
-                                0
-                              )
-                              .toFixed(2)}
-                          </span>
+                          <span>Total: ${order.totalAmount?.toFixed(2) || "0.00"}</span>
                         </div>
                       </div>
                       <div className="card-body">
-                        {order.products.map((product) => (
+                        {order.products?.map((p) => (
                           <div
                             className="row align-items-center mb-2"
-                            key={product._id}
+                            key={p.product?._id || p._id}
                           >
                             <div className="col-3 col-md-2">
                               <img
-                                src={`/api/v1/products/product-photo/${product._id}`}
+                                src={`/api/v1/products/product-photo/${
+                                  p.product?._id || p._id
+                                }`}
                                 className="img-fluid rounded"
-                                alt={product.name}
+                                alt={p.product?.name || p.name}
                                 style={{
                                   width: "60px",
                                   height: "60px",
                                   objectFit: "cover",
                                 }}
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = "https://static-01.daraz.pk/p/39b2f8c5c03f999c95a61c4766889298.jpg"; // Add a default image
+                                }}
                               />
                             </div>
                             <div className="col-5 col-md-6">
-                              <h6 className="mb-1">{product.name}</h6>
+                              <h6 className="mb-1">
+                                {p.product?.name || p.name}
+                              </h6>
                               <small className="text-muted d-block">
-                                Qty: {product.quantity || 1}
+                                Qty: {p.quantity || 1}
+                              </small>
+                              <small className="text-muted">
+                                ${p.price?.toFixed(2) || "0.00"} each
                               </small>
                             </div>
                             <div className="col-4 col-md-4 text-end">
-                              $
-                              {(
-                                product.price * (product.quantity || 1)
-                              ).toFixed(2)}
+                              ${((p.price || 0) * (p.quantity || 1)).toFixed(2)}
                             </div>
                           </div>
                         ))}

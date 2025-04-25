@@ -17,6 +17,7 @@
     "braintree-web": "^3.118.1",
     "braintree-web-drop-in": "^1.44.1",
     "braintree-web-drop-in-react": "^1.2.1",
+    "framer-motion": "^12.9.1",
     "moment": "^2.30.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

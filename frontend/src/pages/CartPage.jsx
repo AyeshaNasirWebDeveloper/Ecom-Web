@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Layout from "./../components/Layout/Layout.jsx";
 import { useCart } from "../context/cart.jsx";
 import { useAuth } from "../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
-import DropIn from "braintree-web-drop-in-react";
+// import DropIn from "braintree-web-drop-in-react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "../styles/CartStyles.css";
@@ -11,8 +11,7 @@ import "../styles/CartStyles.css";
 const CartPage = () => {
   const [auth] = useAuth();
   const [cart, setCart] = useCart();
-  const [clientToken, setClientToken] = useState("");
-  const [instance, setInstance] = useState("");
+  const [instance] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -66,25 +65,21 @@ const CartPage = () => {
   };
 
   // Get payment gateway token
-  const getToken = async () => {
-    try {
-      const { data } = await axios.get("/api/v1/products/braintree/token", {
-        headers: {
-          Authorization: `Bearer ${auth?.token}`,
-        },
-      });
-      setClientToken(data?.clientToken);
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to initialize payment");
-    }
-  };
+  // const getToken = async () => {
+  //   try {
+  //     const { data } = await axios.get("/api/v1/products/braintree/token");
+  //     setClientToken(data?.clientToken);
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error("Failed to initialize payment");
+  //   }
+  // };
 
-  useEffect(() => {
-    if (auth?.token) {
-      getToken();
-    }
-  }, [auth?.token]);
+  // useEffect(() => {
+  //   if (auth?.token) {
+  //     getToken();
+  //   }
+  // }, [auth?.token]);
 
   // Handle payment
   const handlePayment = async () => {
@@ -96,18 +91,10 @@ const CartPage = () => {
 
       setLoading(true);
       const { nonce } = await instance.requestPaymentMethod();
-      await axios.post(
-        "/api/v1/products/braintree/payment",
-        {
-          nonce,
-          cart,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${auth?.token}`,
-          },
-        }
-      );
+      await axios.post("/api/v1/products/braintree/payment", {
+        nonce,
+        cart,
+      });
 
       localStorage.removeItem("cart");
       setCart([]);
@@ -126,32 +113,39 @@ const CartPage = () => {
   // cart checkout
   const handleCheckout = async () => {
     try {
-      if (!auth?.user?.address) {
-        toast.error("Please add a shipping address first");
-        navigate("/dashboard/user/profile");
+      setLoading(true);
+
+      // Validate cart before sending
+      if (!cart || cart.length === 0) {
+        toast.error("Your cart is empty");
         return;
       }
-  
-      setLoading(true);
+
       const { data } = await axios.post(
         "/api/v1/auth/checkout",
-        { cart },
+        {
+          cart: cart.map((item) => ({
+            _id: item._id,
+            price: item.price,
+            quantity: item.quantity || 1,
+          })),
+        }
       );
-      
-      toast.success("Order placed successfully!");
+
+      // Clear cart after successful order
       localStorage.removeItem("cart");
       setCart([]);
+
+      // Redirect to orders page
       navigate("/dashboard/user/orders");
+      toast.success("Order placed successfully!");
     } catch (error) {
-      console.log(error);
-      toast.error(
-        error.response?.data?.message || "Failed to place order"
-      );
+      console.error("Checkout error:", error);
+      toast.error(error.response?.data?.message || "Failed to place order");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <Layout>
       <div className="cart-page container">
@@ -275,7 +269,7 @@ const CartPage = () => {
                     </div>
                   )}
 
-                  {clientToken && auth?.token && cart?.length > 0 && (
+                  {/* {clientToken && auth?.token && cart?.length > 0 && (
                     <div className="payment-section">
                       <DropIn
                         options={{
@@ -294,14 +288,54 @@ const CartPage = () => {
                         {loading ? "Processing..." : "Make Payment"}
                       </button>
                     </div>
-                  )}
-                  {!clientToken && auth?.token && cart?.length > 0 && (
+                  )} */}
+                  {/* {!clientToken && auth?.token && cart?.length > 0 && (
                     <button
                       className="btn btn-success w-100 mt-3"
                       onClick={handleCheckout}
                       disabled={loading || !auth?.user?.address}
                     >
-                      {loading ? "Placing..." : "Place your order"}
+                      {loading ? "Placing..." : "Proceed to Checkout"}
+                    </button>
+                  )} */}
+                  {/* {auth?.token && cart?.length > 0 && (
+                    <div className="d-flex flex-column gap-2">
+                      {clientToken && (
+                        <div className="payment-section">
+                          <DropIn
+                            options={{
+                              authorization: clientToken,
+                              paypal: { flow: "vault" },
+                            }}
+                            onInstance={(instance) => setInstance(instance)}
+                          />
+                          <button
+                            className="btn btn-primary w-100"
+                            onClick={handlePayment}
+                            disabled={
+                              loading || !instance || !auth?.user?.address
+                            }
+                          >
+                            {loading ? "Processing..." : "Pay with Card"}
+                          </button>
+                        </div>
+                      )}
+                      <button
+                        className="btn btn-success w-100"
+                        onClick={handleCheckout}
+                        disabled={loading || !auth?.user?.address}
+                      >
+                        {loading ? "Placing..." : "Cash on Delivery"}
+                      </button>
+                    </div>
+                  )} */}
+                  {auth?.token && cart?.length > 0 && (
+                    <button
+                      className="btn btn-success w-100"
+                      onClick={handleCheckout}
+                      disabled={loading || !auth?.user?.address}
+                    >
+                      {loading ? "Placing Order..." : "Cash on Delivery"}
                     </button>
                   )}
                 </div>

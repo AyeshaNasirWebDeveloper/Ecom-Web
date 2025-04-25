@@ -1,0 +1,18 @@
+.order-page {
+    min-height: 80vh;
+  }
+  
+  .order-page .card {
+    height: 100%;
+    transition: transform 0.3s;
+  }
+  
+  .order-page .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .order-page .list-group-item {
+    border-left: none;
+    border-right: none;
+  }
