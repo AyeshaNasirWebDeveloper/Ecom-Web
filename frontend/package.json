@@ -9,7 +9,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "proxy": "http://localhost:8080"
+    "proxy": "https://e-commerce-production-07f8.up.railway.app/api/v1"
 
   },
   "engines": {
