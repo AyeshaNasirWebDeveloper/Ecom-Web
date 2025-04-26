@@ -4,10 +4,7 @@ import { fileURLToPath, URL } from 'node:url';
 import path from 'node:path';
 
 export default defineConfig(({ mode }) => {
-  // Get current directory using ESM-compatible method
   const currentDir = path.dirname(fileURLToPath(import.meta.url));
-  
-  // Load environment variables
   const env = loadEnv(mode, currentDir, '');
 
   return {
@@ -16,7 +13,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: env.VITE_API,
+          target: env.VITE_API || 'http://localhost:3000', // Added fallback
           changeOrigin: true,
           secure: false,
           rewrite: (path) => path.replace(/^\/api/, ''),
@@ -30,7 +27,17 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: 'dist',
-      emptyOutDir: true
+      emptyOutDir: true,
+      rollupOptions: {
+        output: {
+          assetFileNames: 'assets/[name].[hash][extname]',
+          entryFileNames: 'assets/[name].[hash].js',
+          chunkFileNames: 'assets/[name].[hash].js',
+        }
+      }
+    },
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'react-router-dom']
     }
   };
 });
