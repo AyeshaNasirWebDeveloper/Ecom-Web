@@ -40,17 +40,18 @@ app.use('/api/v1/products', productRoutes);
 // });
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Hello from Vercel!' });
+  res.send('Backend is running on Railway!' );
 });
 
-app.use("/", (req, res, next) => {
-  console.log("Request URL:", req.url, "method: ", req.method);
-  next();
-});
+// app.use("/", (req, res, next) => {
+//   console.log("Request URL:", req.url, "method: ", req.method);
+//   next();
+// });
 
 // server start
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running Successfully on port ${PORT}`.bgMagenta.white);
 });
 
+export default app;
