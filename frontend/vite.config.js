@@ -1,27 +1,30 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
-import path from 'node:path';
+// import path from 'node:path';
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(() => {
   // Get current directory using ESM-compatible method
-  const currentDir = path.dirname(fileURLToPath(import.meta.url));
+  // const currentDir = path.dirname(fileURLToPath(import.meta.url));
   
   // Load environment variables
-  const env = loadEnv(mode, currentDir, '');
+  // const env = loadEnv(mode, currentDir, '');
 
   return {
     plugins: [react()],
     server: {
       proxy: {
         '/api': {
-          target: env.VITE_API || 'http://localhost:3000',
+          target: 'https://e-commerce-production-07f8.up.railway.app',
           changeOrigin: true,
           secure: false,
-          rewrite: (path) => path.replace(/^\/api/, ''),
+          rewrite: (path) => path.replace(/^\/api/, '/api'), // Keep single /api prefix
           configure: (proxy) => {
-            proxy.on('error', (err) => console.log('Proxy Error:', err));
-            proxy.on('proxyReq', (proxyReq) => console.log('Proxy Request:', proxyReq.path));
+            proxy.on('proxyReq', (proxyReq) => {
+              // Remove duplicate version prefix if it exists
+              proxyReq.path = proxyReq.path.replace('/v1/v1', '/v1');
+              console.log('Adjusted Proxy Path:', proxyReq.path);
+            });
           }
         }
       }

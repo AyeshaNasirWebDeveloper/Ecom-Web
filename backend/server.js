@@ -7,7 +7,7 @@ import authRoute from "./routes/authRoute.js";
 import categoryRoute from "./routes/categoryRoute.js";
 import productRoutes from "./routes/productRoute.js";
 import cors from "cors";
-import path from "path";
+// import path from "path";
 
 // database
 connectDB();
@@ -39,14 +39,14 @@ app.use('/api/v1/products', productRoutes);
 //   res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
 // });
 
-app.get('/', (req, res) => {
-  res.send('Backend is running on Railway!' );
-});
-
-// app.use("/", (req, res, next) => {
-//   console.log("Request URL:", req.url, "method: ", req.method);
-//   next();
+// app.get('/', (req, res) => {
+//   res.send('Backend is running on Railway!' );
 // });
+
+app.use("/", (req, res, next) => {
+  console.log("Request URL:", req.url, "method: ", req.method);
+  next();
+});
 
 // server start
 const PORT = process.env.PORT || 3000;
