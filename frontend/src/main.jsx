@@ -13,6 +13,9 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(registrations => {
     registrations.forEach(registration => registration.unregister());
   });
+  caches.keys().then(cacheNames => {
+    cacheNames.forEach(cacheName => caches.delete(cacheName));
+  });
 }
 
 createRoot(document.getElementById("root")).render(
