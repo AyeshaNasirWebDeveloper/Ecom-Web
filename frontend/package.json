@@ -15,7 +15,7 @@
   },
   "engines": {
   "node": ">=20.0.0"
-}
+},
   "dependencies": {
     "antd": "^5.24.7",
     "axios": "^1.8.3",
