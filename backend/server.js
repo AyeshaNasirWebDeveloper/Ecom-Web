@@ -18,7 +18,7 @@ app.use(express.json())
 
 // middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://e-commerce-web-appl.netlify.app/'],
+  origin: 'http://localhost:5173', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
