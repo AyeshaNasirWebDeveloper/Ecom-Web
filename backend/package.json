@@ -8,9 +8,7 @@
     "server": "nodemon server.js",
     "client": "cd frontend && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "cd frontend && npm run build",
-    "install-client": "cd frontend && npm install",
-    "heroku-postbuild": "npm run install-client && npm run build"
+    "build": "cd frontend && npm run build"
   },
   "keywords": [],
   "author": "Ayesha Nasir",
