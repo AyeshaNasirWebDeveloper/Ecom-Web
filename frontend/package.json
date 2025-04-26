@@ -6,7 +6,6 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "prebuild": "rm -rf node_modules && npm install",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
