@@ -6,14 +6,16 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
+    "prebuild": "rm -rf node_modules && npm install",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "proxy": "http://localhost:8080"
+
   },
   "engines": {
-    "node": "20"
-  },
+  "node": ">=20.0.0"
+}
   "dependencies": {
     "antd": "^5.24.7",
     "axios": "^1.8.3",

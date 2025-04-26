@@ -12,7 +12,6 @@ import path from "path";
 // database
 connectDB();
 
-// fix __dirname in ES modules
 const __dirname = path.resolve()
 
 // rest object
@@ -35,9 +34,13 @@ app.use('/api/v1/category', categoryRoute);
 app.use('/api/v1/products', productRoutes);
 
 // production static files
-app.use(express.static(path.join(__dirname, 'frontend/dist')));
+app.use(express.static(path.join(__dirname, './frontend/dist')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+});
+
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hello from Vercel!' });
 });
 
 // server start
@@ -45,3 +48,5 @@ const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
   console.log(`Server is running Successfully on port ${PORT}`.bgMagenta.white);
 });
+
+module.exports = app;

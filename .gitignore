@@ -1,2 +1,23 @@
+# Node.js
+node_modules/
+npm-debug.log
+
+# Environment variables
 .env
-node_modules
+.env.local
+
+# Build directories
+frontend/build/
+backend/dist/
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Backend temporary files
+uploads/  # If you handle file uploads
