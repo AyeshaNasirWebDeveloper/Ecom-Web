@@ -14,6 +14,7 @@ connectDB();
 
 // rest object
 const app = express();
+app.use(express.json())
 
 // middleware
 app.use(cors({
@@ -22,6 +23,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+
 app.options('*', cors());
 app.use(express.json());
 app.use(morgan("dev"));
@@ -32,7 +34,7 @@ app.use('/api/v1/category', categoryRoute);
 app.use('/api/v1/products', productRoutes);
 
 // production static files
-app.use(express.static(path.join(path.resolve(), './frontend/dist')));
+// app.use(express.static(path.join(path.resolve(), './frontend/dist')));
 // app.get('*', (req, res) => {
 //   res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
 // });
@@ -41,10 +43,14 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello from Vercel!' });
 });
 
+app.use("/", (req, res, next) => {
+  console.log("Request URL:", req.url, "method: ", req.method);
+  next();
+});
+
 // server start
 const PORT = process.env.PORT || 5050;
-// app.listen(PORT, () => {
-//   console.log(`Server is running Successfully on port ${PORT}`.bgMagenta.white);
-// });
+app.listen(PORT, () => {
+  console.log(`Server is running Successfully on port ${PORT}`.bgMagenta.white);
+});
 
-export default app;
