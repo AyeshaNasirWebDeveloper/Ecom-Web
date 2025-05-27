@@ -38,7 +38,7 @@ app.use("/api/v1/products", productRoutes);
 // });
 
 app.get('/', (req, res) => {
-  res.send('Backend is running on Railway!' );
+  res.send('Backend is running successfully!' );
 });
 
 // app.use("/", (req, res, next) => {
