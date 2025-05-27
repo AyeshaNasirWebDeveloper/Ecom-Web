@@ -8,9 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "proxy": "https://e-commerce-production-07f8.up.railway.app"
-
+    "preview": "vite preview"
   },
   "engines": {
   "node": ">=20.0.0"

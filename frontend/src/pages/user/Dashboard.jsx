@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "@/components/Layout/Layout";
+import Layout from "../../components/Layout/Layout.jsx";
 import { useAuth } from './../../context/auth.jsx';
 import UserMenu from "../../components/Layout/UserMenu.jsx";
 

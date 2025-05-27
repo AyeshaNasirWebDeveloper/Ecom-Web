@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Layout from "@/components/Layout/Layout";
+import Layout from "../components/Layout/Layout.jsx";
 import "../styles/Policy.css";
 
 const PrivacyPolicy = () => {
