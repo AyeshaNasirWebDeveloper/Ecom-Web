@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "../components/Layout/Layout.jsx";
+import Layout from "../components/layout/Layout.jsx";
 import { useSearch } from "../context/search.jsx";
 const Search = () => {
   const [values] = useSearch();

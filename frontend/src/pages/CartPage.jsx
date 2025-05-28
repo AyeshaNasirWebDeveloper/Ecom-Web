@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Layout from "../components/Layout/Layout.jsx";
+import Layout from "../components/layout/Layout.jsx";
 import { useCart } from "../context/cart.jsx";
 import { useAuth } from "../context/auth.jsx";
 import { useNavigate } from "react-router-dom";

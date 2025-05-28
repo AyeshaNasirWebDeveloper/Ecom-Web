@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Layout from "../../components/Layout/Layout.jsx";
-import AdminMenu from "../../components/Layout/AdminMenu.jsx";
+import Layout from "../../components/layout/Layout.jsx";
+import AdminMenu from "../../components/layout/AdminMenu.jsx";
 import { Table, Tag, Space, Avatar, Badge } from "antd";
 import moment from "moment";
 
