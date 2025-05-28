@@ -109,27 +109,22 @@ export const getSingleProductController = async (req, res) => {
 export const productPhotoController = async (req, res) => {
   try {
     const product = await productModel.findById(req.params.pid).select("photo");
-    
-    if (!product?.photo?.data) {
-      return res.status(404).json({
+
+    if (!product || !product.photo || !product.photo.data) {
+      return res.status(404).send({
         success: false,
-        message: "Photo not found"
+        message: "Photo not found",
       });
     }
 
-    // Set cache headers for better performance
-    res.set({
-      "Content-Type": product.photo.contentType || "image/jpeg",
-      "Cache-Control": "public, max-age=31536000" // 1 year cache
-    });
-    
+    res.set("Content-Type", product.photo.contentType || "image/jpeg");
     return res.send(product.photo.data);
   } catch (error) {
-    console.error("Photo Controller Error:", error);
-    return res.status(500).json({
+    console.error(error);
+    res.status(500).send({
       success: false,
       message: "Error while getting photo",
-      error: error.message
+      error: error.message,
     });
   }
 };
