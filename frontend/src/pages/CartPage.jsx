@@ -4,7 +4,7 @@ import { useCart } from "../context/cart.jsx";
 import { useAuth } from "../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
 // import DropIn from "braintree-web-drop-in-react";
-import axios from "axios";
+import axios from '.././utils/axios.js';
 import { toast } from "react-toastify";
 import "../styles/CartStyles.css";
 

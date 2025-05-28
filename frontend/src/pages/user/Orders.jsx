@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import UserMenu from "../../components/layout/UserMenu.jsx";
 import Layout from "../../components/layout/Layout.jsx";
-import axios from "axios";
+import axios from '../../utils/axios.js';
 import { useAuth } from "../../context/auth.jsx";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
