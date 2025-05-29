@@ -15,12 +15,13 @@ connectDB();
 const app = express();
 
 // Middleware
-    app.use(
-      cors({
-        origin: "https://ecom-web-fronte.vercel.app",
-        credentials: true,
-      })
-    )
+app.use(
+  cors({
+    origin: ['https://ecom-web-fronte.vercel.app'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    credentials: true, 
+  })
+);
 
 app.use(express.json());
 app.use(morgan("dev"));
